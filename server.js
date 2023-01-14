@@ -1,6 +1,17 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
+const tweets = [
+  {
+    id: "1",
+    text: "Hello",
+  },
+  {
+    id: "2",
+    text: "Bye",
+  },
+];
+
 const typeDefs = `
     type User {
         id: ID!
@@ -12,7 +23,7 @@ const typeDefs = `
     type Tweet {
         id: ID!
         text: String!
-        author: User!
+        author: User
     }
 
     type Query {
@@ -26,8 +37,20 @@ const typeDefs = `
     }
 `;
 
+const resolvers = {
+  Query: {
+    allTweets() {
+      return tweets;
+    },
+    tweet(root, { id }) {
+      return tweets.find((tweet) => tweet.id === id);
+    },
+  },
+};
+
 const server = new ApolloServer({
   typeDefs,
+  resolvers,
 });
 
 const { url } = await startStandaloneServer(server, {
