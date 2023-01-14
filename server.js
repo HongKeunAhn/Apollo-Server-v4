@@ -12,12 +12,26 @@ let tweets = [
   },
 ];
 
+let users = [
+  {
+    id: "1",
+    firstName: "Hong",
+    lastName: "Ahn",
+  },
+  {
+    id: "2",
+    firstName: "Nol",
+    lastName: "Kim",
+  },
+];
+
 const typeDefs = `
     type User {
         id: ID!
         username: String!
         firstName: String!
         lastName: String!
+        fullName: String!
     }
 
     type Tweet {
@@ -27,6 +41,7 @@ const typeDefs = `
     }
 
     type Query {
+        allUsers: [User!]!
         allTweets: [Tweet!]!
         tweet(id: ID!): Tweet
     }
@@ -44,6 +59,9 @@ const resolvers = {
     },
     tweet(root, { id }) {
       return tweets.find((tweet) => tweet.id === id);
+    },
+    allUsers() {
+      return users;
     },
   },
   Mutation: {
@@ -66,6 +84,11 @@ const resolvers = {
       tweets = tweets.filter((tweet) => tweet.id !== id);
 
       return true;
+    },
+  },
+  User: {
+    fullName({ firstName, lastName }) {
+      return `${firstName} ${lastName}`;
     },
   },
 };
