@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
-const tweets = [
+let tweets = [
   {
     id: "1",
     text: "Hello",
@@ -44,6 +44,28 @@ const resolvers = {
     },
     tweet(root, { id }) {
       return tweets.find((tweet) => tweet.id === id);
+    },
+  },
+  Mutation: {
+    postTweet(root, { text, userId }) {
+      const newTweet = {
+        id: tweets.length + 1,
+        text,
+      };
+      tweets.push(newTweet);
+
+      return newTweet;
+    },
+    deleteTweet(root, { id }) {
+      const newTweet = tweets.find((tweet) => tweet.id === id);
+
+      if (!newTweet) {
+        return false;
+      }
+
+      tweets = tweets.filter((tweet) => tweet.id !== id);
+
+      return true;
     },
   },
 };
