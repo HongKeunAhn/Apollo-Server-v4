@@ -1,7 +1,13 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
-let tweets = [
+type TweetType = {
+  id: string;
+  text: string;
+  userId?: string;
+};
+
+let tweets: TweetType[] = [
   {
     id: "1",
     text: "Hello",
@@ -78,7 +84,7 @@ const resolvers = {
   Mutation: {
     postTweet(root, { text, userId }) {
       const newTweet = {
-        id: tweets.length + 1,
+        id: String(tweets.length + 1),
         text,
       };
       tweets.push(newTweet);
